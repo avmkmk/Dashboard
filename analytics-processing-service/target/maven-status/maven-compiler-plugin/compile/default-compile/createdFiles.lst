@@ -1,0 +1,14 @@
+com\cloudkitchen\repository\RawOrdersDataRepository.class
+com\cloudkitchen\model\MonthlyKpis.class
+com\cloudkitchen\repository\DailyKpisRepository.class
+com\cloudkitchen\AnalyticsProcessingServiceApplication.class
+com\cloudkitchen\model\WeeklyKpis.class
+com\cloudkitchen\repository\MonthlyKpisRepository.class
+com\cloudkitchen\service\impl\AnalyticsServiceImpl.class
+com\cloudkitchen\service\AnalyticsService.class
+com\cloudkitchen\App.class
+com\cloudkitchen\listener\AnalyticsController.class
+com\cloudkitchen\model\DailyKpis.class
+com\cloudkitchen\model\RawItemsData.class
+com\cloudkitchen\model\RawOrdersData.class
+com\cloudkitchen\repository\WeeklyKpisRepository.class

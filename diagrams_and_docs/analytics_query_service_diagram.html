@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analytics Query Service Component Diagram Details</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://www.plantuml.com/plantuml.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>5. Component Diagram - Analytics Query Service</h1>
+        <p>This diagram details the internal components of the Analytics Query Service.</p>
+        <img id="diagram">
+        <script>
+            var uml = `
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+Container(query_service, "Analytics Query Service", "Spring Boot Application", "Exposes REST APIs for querying processed analytics data.")
+
+Component(query_controller, "AnalyticsQueryController", "Spring REST Controller", "Exposes API endpoints for querying KPIs.")
+Component(query_service_impl, "AnalyticsQueryServiceImpl", "Spring Service", "Contains business logic for retrieving KPI data.")
+Component(daily_kpis_repo, "DailyKpisRepository", "Spring Data JPA Repository", "Fetches DailyKpis.")
+Component(weekly_kpis_repo, "WeeklyKpisRepository", "Spring Data JPA Repository", "Fetches WeeklyKpis.")
+Component(monthly_kpis_repo, "MonthlyKpisRepository", "Spring Data JPA Repository", "Fetches MonthlyKpis.")
+Component(daily_kpis, "DailyKpis", "JPA Entity", "Represents daily aggregated KPIs.")
+Component(weekly_kpis, "WeeklyKpis", "JPA Entity", "Represents weekly aggregated KPIs.")
+Component(monthly_kpis, "MonthlyKpis", "JPA Entity", "Represents monthly aggregated KPIs.")
+Component(revenue_response, "RevenueResponse", "DTO", "Data Transfer Object for revenue queries.")
+
+Rel(query_controller, query_service_impl, "Uses")
+Rel(query_service_impl, daily_kpis_repo, "Uses")
+Rel(query_service_impl, weekly_kpis_repo, "Uses")
+Rel(query_service_impl, monthly_kpis_repo, "Uses")
+
+Rel(daily_kpis_repo, daily_kpis, "Maps to")
+Rel(weekly_kpis_repo, weekly_kpis, "Maps to")
+Rel(monthly_kpis_repo, monthly_kpis, "Maps to")
+
+Rel(query_controller, revenue_response, "Returns")
+
+ContainerDb(database, "PostgreSQL Database", "Relational Database", "Stores processed data.")
+Rel(daily_kpis_repo, database, "Retrieves", "analytics_schema.daily_kpis")
+Rel(weekly_kpis_repo, database, "Retrieves", "analytics_schema.weekly_kpis")
+Rel(monthly_kpis_repo, database, "Retrieves", "analytics_schema.monthly_kpis")
+@enduml
+`;
+            var diagram = document.getElementById("diagram");
+            diagram.src = "https://www.plantuml.com/plantuml/svg/" + plantuml.encode(uml);
+        </script>
+        <a href="design_diagrams.html">Back to Overview</a>
+    </div>
+</body>
+</html>

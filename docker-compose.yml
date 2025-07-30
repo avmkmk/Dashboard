@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:13
+    container_name: cloud-kitchen-db
+    environment:
+      POSTGRES_DB: cloud_kitchen
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5432:5432"
+
+  data-ingestion-service:
+    build: ./data-ingestion-service
+    container_name: data-ingestion-service
+    ports:
+      - "8081:8081"
+    depends_on:
+      - postgres
+
+  analytics-processing-service:
+    build: ./analytics-processing-service
+    container_name: analytics-processing-service
+    ports:
+      - "8082:8082"
+    depends_on:
+      - postgres
+
+  analytics-query-service:
+    build: ./analytics-query-service
+    container_name: analytics-query-service
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres

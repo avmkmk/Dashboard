@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Ingestion Service Component Diagram Details</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://www.plantuml.com/plantuml.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>3. Component Diagram - Data Ingestion Service</h1>
+        <p>This diagram details the internal components of the Data Ingestion Service.</p>
+        <img id="diagram">
+        <script>
+            var uml = `
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+Container(ingestion_service, "Data Ingestion Service", "Spring Boot Application", "Handles CSV file uploads, parsing, and raw data storage.")
+
+Component(ingestion_controller, "DataIngestionController", "Spring REST Controller", "Exposes API endpoints for CSV uploads.")
+Component(ingestion_service_impl, "DataIngestionServiceImpl", "Spring Service", "Contains business logic for processing CSV data.")
+Component(raw_orders_repo, "RawOrdersDataRepository", "Spring Data JPA Repository", "Manages persistence of RawOrdersData.")
+Component(raw_items_repo, "RawItemsDataRepository", "Spring Data JPA Repository", "Manages persistence of RawItemsData.")
+Component(raw_orders_data, "RawOrdersData", "JPA Entity", "Represents raw orders data.")
+Component(raw_items_data, "RawItemsData", "JPA Entity", "Represents raw items data.")
+
+Rel(ingestion_controller, ingestion_service_impl, "Uses")
+Rel(ingestion_service_impl, raw_orders_repo, "Uses")
+Rel(ingestion_service_impl, raw_items_repo, "Uses")
+Rel(raw_orders_repo, raw_orders_data, "Maps to")
+Rel(raw_items_repo, raw_items_data, "Maps to")
+
+ContainerDb(database, "PostgreSQL Database", "Relational Database", "Stores raw data.")
+Rel(raw_orders_repo, database, "Persists/Retrieves", "raw_data_schema.raw_orders_data")
+Rel(raw_items_repo, database, "Persists/Retrieves", "raw_data_schema.raw_items_data")
+@enduml
+`;
+            var diagram = document.getElementById("diagram");
+            diagram.src = "https://www.plantuml.com/plantuml/svg/" + plantuml.encode(uml);
+        </script>
+        <a href="design_diagrams.html">Back to Overview</a>
+    </div>
+</body>
+</html>

@@ -1,0 +1,212 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Cloud Kitchen Analytics Design</title>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; margin: 0; background-color: #f0f2f5; color: #1c1e21; }
+        .header { background-color: #fff; padding: 20px; text-align: center; border-bottom: 1px solid #dddfe2; }
+        .container { padding: 20px; }
+        .diagram { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 40px; margin-bottom: 40px; }
+        .component, .actor, .database {
+            background-color: #fff;
+            border: 1px solid #dddfe2;
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            min-width: 150px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+        }
+        .component:hover, .actor:hover, .database:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23); }
+        .component h3, .actor h3, .database h3 { margin-top: 0; color: #0056b3; }
+        .database { border-radius: 50% / 10%; }
+        .detail-view { display: none; padding: 20px; background-color: #fff; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
+        .detail-view h2 { color: #0056b3; border-bottom: 2px solid #0056b3; padding-bottom: 10px; }
+        .back-button { background-color: #0056b3; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; margin-bottom: 20px; }
+        .plantuml-diagram { max-width: 100%; height: auto; border: 1px solid #ddd; border-radius: 4px; margin-top: 20px; }
+        pre { background-color: #f6f8fa; padding: 15px; border-radius: 5px; overflow-x: auto; text-align: left; border: 1px solid #ddd; }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h1>Interactive Cloud Kitchen Analytics Design</h1>
+    </div>
+
+    <div class="container" id="main-view">
+        <div class="diagram">
+            <div class="actor" data-target="user-detail"><h3>User</h3></div>
+            <div class="component" data-target="system-detail"><h3>Cloud Kitchen Analytics System</h3></div>
+            <div class="database" data-target="db-detail"><h3>PostgreSQL Database</h3></div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div id="user-detail" class="detail-view">
+            <button class="back-button">Back</button>
+            <h2>User Details</h2>
+            <p><strong>Role:</strong> Cloud Kitchen Operator/Analyst</p>
+            <p><strong>Interactions:</strong></p>
+            <ul>
+                <li>Uploads CSV reports containing orders and items data.</li>
+                <li>Triggers the analytics processing service to calculate KPIs.</li>
+                <li>Queries the system to retrieve analytics data (e.g., daily, weekly, monthly revenue).</li>
+            </ul>
+        </div>
+
+        <div id="system-detail" class="detail-view">
+            <button class="back-button">Back</button>
+            <h2>Cloud Kitchen Analytics System Details</h2>
+            <p>This system is composed of three microservices that work together to provide data ingestion, processing, and querying capabilities.</p>
+            <img class="plantuml-diagram" src="https://www.plantuml.com/plantuml/svg/bP3BQiCm38Rl-nL40000" alt="Container Diagram">
+            <pre>
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+Person(user, "User", "Cloud Kitchen Operator/Analyst")
+
+System_Boundary(c4_system, "Cloud Kitchen Analytics") {
+    Container(ingestion_service, "Data Ingestion Service", "Spring Boot Application", "Handles CSV file uploads, parsing, and raw data storage. (Port: 8081)")
+    Container(processing_service, "Analytics Processing Service", "Spring Boot Application", "Consumes raw data, calculates KPIs, and stores aggregated analytics. (Port: 8082)")
+    Container(query_service, "Analytics Query Service", "Spring Boot Application", "Exposes REST APIs for querying processed analytics data. (Port: 8080)")
+    ContainerDb(database, "PostgreSQL Database", "Relational Database", "Stores raw data (raw_data_schema) and analytics data (analytics_schema).")
+}
+
+Rel(user, ingestion_service, "Uploads CSV reports", "HTTP POST")
+Rel(user, processing_service, "Triggers analytics processing", "HTTP POST")
+Rel(user, query_service, "Queries analytics data", "HTTP GET")
+
+Rel(ingestion_service, database, "Stores raw data", "JDBC")
+Rel(processing_service, database, "Reads raw data, Writes processed data", "JDBC")
+Rel(query_service, database, "Reads processed data", "JDBC")
+@enduml
+            </pre>
+        </div>
+
+        <div id="db-detail" class="detail-view">
+            <button class="back-button">Back</button>
+            <h2>PostgreSQL Database Details</h2>
+            <p>The database is structured into two main schemas: <code>raw_data_schema</code> for ingested data and <code>analytics_schema</code> for processed KPIs.</p>
+            <h3>raw_data_schema</h3>
+            <img class="plantuml-diagram" src="https://www.plantuml.com/plantuml/svg/bP3BQiCm38Rl-nL40000" alt="Raw Data Schema Data Model Diagram">
+            <pre>
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+' Using C4_Container for database tables as it provides good visual representation for entities
+
+ContainerDb(raw_orders_data, "raw_data_schema.raw_orders_data", "Table", "Stores raw orders data ingested from CSV files.") {
+    Field(id, "id", "BIGSERIAL", "PK")
+    Field(invoice_no, "invoice_no", "VARCHAR(255)")
+    Field(date, "date", "TIMESTAMP")
+    Field(timestamp, "timestamp", "TIMESTAMP")
+    Field(payment_type, "payment_type", "VARCHAR(255)")
+    Field(order_type, "order_type", "VARCHAR(255)")
+    Field(area, "area", "VARCHAR(255)")
+    Field(sub_order_type, "sub_order_type", "VARCHAR(255)")
+    Field(phone, "phone", "VARCHAR(255)")
+    Field(name, "name", "VARCHAR(255)")
+    Field(address, "address", "VARCHAR(255)")
+    Field(my_amount, "my_amount", "NUMERIC(38,2)")
+    Field(discount, "discount", "NUMERIC(38,2)")
+    Field(net_sales, "net_sales", "NUMERIC(38,2)")
+    Field(container_charge, "container_charge", "NUMERIC(38,2)")
+    Field(total_tax, "total_tax", "NUMERIC(38,2)")
+    Field(round_off, "round_off", "NUMERIC(38,2)")
+    Field(total_amount, "total_amount", "NUMERIC(38,2)")
+    Field(online_tax_calculated, "online_tax_calculated", "NUMERIC(38,2)")
+    Field(gst_paid_by_ecommerce, "gst_paid_by_ecommerce", "NUMERIC(38,2)")
+    Field(amount_cgst, "amount_cgst", "NUMERIC(38,2)")
+    Field(cgst, "cgst", "NUMERIC(38,2)")
+    Field(amount_sgst, "amount_sgst", "NUMERIC(38,2)")
+    Field(sgst, "sgst", "NUMERIC(38,2)")
+    Field(raw_line, "raw_line", "TEXT")
+}
+
+ContainerDb(raw_items_data, "raw_data_schema.raw_items_data", "Table", "Stores raw items data ingested from CSV files.") {
+    Field(id, "id", "BIGSERIAL", "PK")
+    Field(invoice_no, "invoice_no", "VARCHAR(255)")
+    Field(date, "date", "TIMESTAMP")
+    Field(timestamp, "timestamp", "TIMESTAMP")
+    Field(item_name, "item_name", "VARCHAR(255)")
+    Field(category, "category", "VARCHAR(255)")
+    Field(variation, "variation", "VARCHAR(255)")
+    Field(qty, "qty", "INTEGER")
+    Field(tax, "tax", "NUMERIC(38,2)")
+    Field(raw_line, "raw_line", "TEXT")
+}
+@enduml
+            </pre>
+            <h3>analytics_schema</h3>
+            <img class="plantuml-diagram" src="https://www.plantuml.com/plantuml/svg/bP3BQiCm38Rl-nL40000" alt="Analytics Schema Data Model Diagram">
+            <pre>
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+' Using C4_Container for database tables as it provides good visual representation for entities
+
+ContainerDb(daily_kpis, "analytics_schema.daily_kpis", "Table", "Stores daily aggregated KPIs.") {
+    Field(id, "id", "BIGSERIAL", "PK")
+    Field(report_date, "report_date", "DATE", "Unique")
+    Field(total_revenue, "total_revenue", "NUMERIC(38,2)")
+    Field(aggregator_revenue_zomato, "aggregator_revenue_zomato", "NUMERIC(38,2)")
+    Field(aggregator_revenue_swiggy, "aggregator_revenue_swiggy", "NUMERIC(38,2)")
+    Field(aggregator_revenue_pickup, "aggregator_revenue_pickup", "NUMERIC(38,2)")
+    Field(estimated_aggregator_commission, "estimated_aggregator_commission", "NUMERIC(38,2)")
+    Field(total_food_cost, "total_food_cost", "NUMERIC(38,2)")
+    Field(estimated_wastage_amount, "estimated_wastage_amount", "NUMERIC(38,2)")
+    Field(total_order_count, "total_order_count", "INTEGER")
+    Field(new_customer_count, "new_customer_count", "INTEGER")
+    Field(repeat_customer_count, "repeat_customer_count", "INTEGER")
+    Field(last_updated, "last_updated", "TIMESTAMP")
+}
+
+ContainerDb(weekly_kpis, "analytics_schema.weekly_kpis", "Table", "Stores weekly aggregated KPIs.") {
+    Field(id, "id", "BIGSERIAL", "PK")
+    Field(week_start_date, "week_start_date", "DATE", "Unique")
+    Field(total_revenue, "total_revenue", "NUMERIC(38,2)")
+    ' Add other weekly metrics as needed
+}
+
+ContainerDb(monthly_kpis, "analytics_schema.monthly_kpis", "Table", "Stores monthly aggregated KPIs.") {
+    Field(id, "id", "BIGSERIAL", "PK")
+    Field(month_start_date, "month_start_date", "DATE", "Unique")
+    Field(total_revenue, "total_revenue", "NUMERIC(38,2)")
+    ' Add other monthly metrics as needed
+}
+@enduml
+            </pre>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const mainView = document.getElementById('main-view');
+            const detailViews = document.querySelectorAll('.detail-view');
+            const components = document.querySelectorAll('.component, .actor, .database');
+            const backButtons = document.querySelectorAll('.back-button');
+
+            components.forEach(component => {
+                component.addEventListener('click', () => {
+                    const targetId = component.getAttribute('data-target');
+                    const targetView = document.getElementById(targetId);
+
+                    mainView.style.display = 'none';
+                    detailViews.forEach(view => view.style.display = 'none');
+                    targetView.style.display = 'block';
+                });
+            });
+
+            backButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    mainView.style.display = 'block';
+                    detailViews.forEach(view => view.style.display = 'none');
+                });
+            });
+        });
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Container Diagram Details</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://www.plantuml.com/plantuml.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>2. Container Diagram</h1>
+        <p>This diagram illustrates the main microservices (containers) within the Cloud Kitchen Analytics system and their interactions, including the shared PostgreSQL database.</p>
+        <img id="diagram">
+        <script>
+            var uml = `
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+Person(user, "User", "Cloud Kitchen Operator/Analyst")
+
+System_Boundary(c4_system, "Cloud Kitchen Analytics") {
+    Container(ingestion_service, "Data Ingestion Service", "Spring Boot Application", "Handles CSV file uploads, parsing, and raw data storage. (Port: 8081)")
+    Container(processing_service, "Analytics Processing Service", "Spring Boot Application", "Consumes raw data, calculates KPIs, and stores aggregated analytics. (Port: 8082)")
+    Container(query_service, "Analytics Query Service", "Spring Boot Application", "Exposes REST APIs for querying processed analytics data. (Port: 8080)")
+    ContainerDb(database, "PostgreSQL Database", "Relational Database", "Stores raw data (raw_data_schema) and analytics data (analytics_schema).")
+}
+
+Rel(user, ingestion_service, "Uploads CSV reports", "HTTP POST")
+Rel(user, processing_service, "Triggers analytics processing", "HTTP POST")
+Rel(user, query_service, "Queries analytics data", "HTTP GET")
+
+Rel(ingestion_service, database, "Stores raw data", "JDBC")
+Rel(processing_service, database, "Reads raw data, Writes processed data", "JDBC")
+Rel(query_service, database, "Reads processed data", "JDBC")
+@enduml
+`;
+            var diagram = document.getElementById("diagram");
+            diagram.src = "https://www.plantuml.com/plantuml/svg/" + plantuml.encode(uml);
+        </script>
+        <a href="design_diagrams.html">Back to Overview</a>
+    </div>
+</body>
+</html>

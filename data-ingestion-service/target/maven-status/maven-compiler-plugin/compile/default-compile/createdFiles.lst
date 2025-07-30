@@ -1,0 +1,9 @@
+com\cloudkitchen\repository\RawOrdersDataRepository.class
+com\cloudkitchen\service\impl\DataIngestionServiceImpl.class
+com\cloudkitchen\repository\RawItemsDataRepository.class
+com\cloudkitchen\DataIngestionServiceApplication.class
+com\cloudkitchen\App.class
+com\cloudkitchen\controller\DataIngestionController.class
+com\cloudkitchen\model\RawItemsData.class
+com\cloudkitchen\service\DataIngestionService.class
+com\cloudkitchen\model\RawOrdersData.class

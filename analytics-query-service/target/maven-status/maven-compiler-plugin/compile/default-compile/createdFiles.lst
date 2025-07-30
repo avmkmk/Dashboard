@@ -1,0 +1,12 @@
+com\cloudkitchen\model\MonthlyKpis.class
+com\cloudkitchen\service\impl\AnalyticsQueryServiceImpl.class
+com\cloudkitchen\repository\DailyKpisRepository.class
+com\cloudkitchen\model\WeeklyKpis.class
+com\cloudkitchen\AnalyticsQueryServiceApplication.class
+com\cloudkitchen\repository\MonthlyKpisRepository.class
+com\cloudkitchen\service\AnalyticsQueryService.class
+com\cloudkitchen\App.class
+com\cloudkitchen\model\DailyKpis.class
+com\cloudkitchen\controller\AnalyticsQueryController.class
+com\cloudkitchen\dto\RevenueResponse.class
+com\cloudkitchen\repository\WeeklyKpisRepository.class

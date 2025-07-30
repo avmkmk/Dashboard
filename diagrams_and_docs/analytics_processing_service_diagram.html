@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analytics Processing Service Component Diagram Details</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://www.plantuml.com/plantuml.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>4. Component Diagram - Analytics Processing Service</h1>
+        <p>This diagram details the internal components of the Analytics Processing Service.</p>
+        <img id="diagram">
+        <script>
+            var uml = `
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+Container(processing_service, "Analytics Processing Service", "Spring Boot Application", "Consumes raw data, calculates KPIs, and stores aggregated analytics.")
+
+Component(analytics_controller, "AnalyticsController", "Spring REST Controller", "Exposes API endpoint to trigger processing.")
+Component(analytics_service_impl, "AnalyticsServiceImpl", "Spring Service", "Contains business logic for KPI calculation.")
+Component(raw_orders_repo, "RawOrdersDataRepository", "Spring Data JPA Repository", "Fetches raw orders data.")
+Component(daily_kpis_repo, "DailyKpisRepository", "Spring Data JPA Repository", "Manages persistence of DailyKpis.")
+Component(weekly_kpis_repo, "WeeklyKpisRepository", "Spring Data JPA Repository", "Manages persistence of WeeklyKpis.")
+Component(monthly_kpis_repo, "MonthlyKpisRepository", "Spring Data JPA Repository", "Manages persistence of MonthlyKpis.")
+Component(raw_orders_data, "RawOrdersData", "JPA Entity", "Represents raw orders data.")
+Component(daily_kpis, "DailyKpis", "JPA Entity", "Represents daily aggregated KPIs.")
+Component(weekly_kpis, "WeeklyKpis", "JPA Entity", "Represents weekly aggregated KPIs.")
+Component(monthly_kpis, "MonthlyKpis", "JPA Entity", "Represents monthly aggregated KPIs.")
+
+Rel(analytics_controller, analytics_service_impl, "Uses")
+Rel(analytics_service_impl, raw_orders_repo, "Uses")
+Rel(analytics_service_impl, daily_kpis_repo, "Uses")
+Rel(analytics_service_impl, weekly_kpis_repo, "Uses")
+Rel(analytics_service_impl, monthly_kpis_repo, "Uses")
+
+Rel(raw_orders_repo, raw_orders_data, "Maps to")
+Rel(daily_kpis_repo, daily_kpis, "Maps to")
+Rel(weekly_kpis_repo, weekly_kpis, "Maps to")
+Rel(monthly_kpis_repo, monthly_kpis, "Maps to")
+
+ContainerDb(database, "PostgreSQL Database", "Relational Database", "Stores raw and processed data.")
+Rel(raw_orders_repo, database, "Retrieves", "raw_data_schema.raw_orders_data")
+Rel(daily_kpis_repo, database, "Persists", "analytics_schema.daily_kpis")
+Rel(weekly_kpis_repo, database, "Persists", "analytics_schema.weekly_kpis")
+Rel(monthly_kpis_repo, database, "Persists", "analytics_schema.monthly_kpis")
+@enduml
+`;
+            var diagram = document.getElementById("diagram");
+            diagram.src = "https://www.plantuml.com/plantuml/svg/" + plantuml.encode(uml);
+        </script>
+        <a href="design_diagrams.html">Back to Overview</a>
+    </div>
+</body>
+</html>

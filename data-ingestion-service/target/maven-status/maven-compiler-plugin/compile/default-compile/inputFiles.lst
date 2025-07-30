@@ -1,0 +1,9 @@
+D:\Projects\CloudKitchenAnalytics\data-ingestion-service\src\main\java\com\cloudkitchen\service\impl\DataIngestionServiceImpl.java
+D:\Projects\CloudKitchenAnalytics\data-ingestion-service\src\main\java\com\cloudkitchen\model\RawOrdersData.java
+D:\Projects\CloudKitchenAnalytics\data-ingestion-service\src\main\java\com\cloudkitchen\repository\RawItemsDataRepository.java
+D:\Projects\CloudKitchenAnalytics\data-ingestion-service\src\main\java\com\cloudkitchen\service\DataIngestionService.java
+D:\Projects\CloudKitchenAnalytics\data-ingestion-service\src\main\java\com\cloudkitchen\DataIngestionServiceApplication.java
+D:\Projects\CloudKitchenAnalytics\data-ingestion-service\src\main\java\com\cloudkitchen\App.java
+D:\Projects\CloudKitchenAnalytics\data-ingestion-service\src\main\java\com\cloudkitchen\controller\DataIngestionController.java
+D:\Projects\CloudKitchenAnalytics\data-ingestion-service\src\main\java\com\cloudkitchen\model\RawItemsData.java
+D:\Projects\CloudKitchenAnalytics\data-ingestion-service\src\main\java\com\cloudkitchen\repository\RawOrdersDataRepository.java

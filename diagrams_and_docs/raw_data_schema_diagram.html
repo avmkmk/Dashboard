@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Raw Data Schema Details</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://www.plantuml.com/plantuml.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>6. Data Model Diagram - raw_data_schema</h1>
+        <p>This diagram shows the tables and their columns within the <code>raw_data_schema</code> in the PostgreSQL database.</p>
+        <img id="diagram">
+        <script>
+            var uml = `
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+' Using C4_Container for database tables as it provides good visual representation for entities
+
+ContainerDb(raw_orders_data, "raw_data_schema.raw_orders_data", "Table", "Stores raw orders data ingested from CSV files.") {
+    Field(id, "id", "BIGSERIAL", "PK")
+    Field(invoice_no, "invoice_no", "VARCHAR(255)")
+    Field(date, "date", "TIMESTAMP")
+    Field(timestamp, "timestamp", "TIMESTAMP")
+    Field(payment_type, "payment_type", "VARCHAR(255)")
+    Field(order_type, "order_type", "VARCHAR(255)")
+    Field(area, "area", "VARCHAR(255)")
+    Field(sub_order_type, "sub_order_type", "VARCHAR(255)")
+    Field(phone, "phone", "VARCHAR(255)")
+    Field(name, "name", "VARCHAR(255)")
+    Field(address, "address", "VARCHAR(255)")
+    Field(my_amount, "my_amount", "NUMERIC(38,2)")
+    Field(discount, "discount", "NUMERIC(38,2)")
+    Field(net_sales, "net_sales", "NUMERIC(38,2)")
+    Field(container_charge, "container_charge", "NUMERIC(38,2)")
+    Field(total_tax, "total_tax", "NUMERIC(38,2)")
+    Field(round_off, "round_off", "NUMERIC(38,2)")
+    Field(total_amount, "total_amount", "NUMERIC(38,2)")
+    Field(online_tax_calculated, "online_tax_calculated", "NUMERIC(38,2)")
+    Field(gst_paid_by_ecommerce, "gst_paid_by_ecommerce", "NUMERIC(38,2)")
+    Field(amount_cgst, "amount_cgst", "NUMERIC(38,2)")
+    Field(cgst, "cgst", "NUMERIC(38,2)")
+    Field(amount_sgst, "amount_sgst", "NUMERIC(38,2)")
+    Field(sgst, "sgst", "NUMERIC(38,2)")
+    Field(raw_line, "raw_line", "TEXT")
+}
+
+ContainerDb(raw_items_data, "raw_data_schema.raw_items_data", "Table", "Stores raw items data ingested from CSV files.") {
+    Field(id, "id", "BIGSERIAL", "PK")
+    Field(invoice_no, "invoice_no", "VARCHAR(255)")
+    Field(date, "date", "TIMESTAMP")
+    Field(timestamp, "timestamp", "TIMESTAMP")
+    Field(item_name, "item_name", "VARCHAR(255)")
+    Field(category, "category", "VARCHAR(255)")
+    Field(variation, "variation", "VARCHAR(255)")
+    Field(qty, "qty", "INTEGER")
+    Field(tax, "tax", "NUMERIC(38,2)")
+    Field(raw_line, "raw_line", "TEXT")
+}
+@enduml
+`;
+            var diagram = document.getElementById("diagram");
+            diagram.src = "https://www.plantuml.com/plantuml/svg/" + plantuml.encode(uml);
+        </script>
+        <a href="design_diagrams.html">Back to Overview</a>
+    </div>
+</body>
+</html>

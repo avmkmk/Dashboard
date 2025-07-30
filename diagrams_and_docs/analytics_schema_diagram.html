@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analytics Schema Details</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://www.plantuml.com/plantuml.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>7. Data Model Diagram - analytics_schema</h1>
+        <p>This diagram shows the tables and their columns within the <code>analytics_schema</code> in the PostgreSQL database.</p>
+        <img id="diagram">
+        <script>
+            var uml = `
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+' Using C4_Container for database tables as it provides good visual representation for entities
+
+ContainerDb(daily_kpis, "analytics_schema.daily_kpis", "Table", "Stores daily aggregated KPIs.") {
+    Field(id, "id", "BIGSERIAL", "PK")
+    Field(report_date, "report_date", "DATE", "Unique")
+    Field(total_revenue, "total_revenue", "NUMERIC(38,2)")
+    Field(aggregator_revenue_zomato, "aggregator_revenue_zomato", "NUMERIC(38,2)")
+    Field(aggregator_revenue_swiggy, "aggregator_revenue_swiggy", "NUMERIC(38,2)")
+    Field(aggregator_revenue_pickup, "aggregator_revenue_pickup", "NUMERIC(38,2)")
+    Field(estimated_aggregator_commission, "estimated_aggregator_commission", "NUMERIC(38,2)")
+    Field(total_food_cost, "total_food_cost", "NUMERIC(38,2)")
+    Field(estimated_wastage_amount, "estimated_wastage_amount", "NUMERIC(38,2)")
+    Field(total_order_count, "total_order_count", "INTEGER")
+    Field(new_customer_count, "new_customer_count", "INTEGER")
+    Field(repeat_customer_count, "repeat_customer_count", "INTEGER")
+    Field(last_updated, "last_updated", "TIMESTAMP")
+}
+
+ContainerDb(weekly_kpis, "analytics_schema.weekly_kpis", "Table", "Stores weekly aggregated KPIs.") {
+    Field(id, "id", "BIGSERIAL", "PK")
+    Field(week_start_date, "week_start_date", "DATE", "Unique")
+    Field(total_revenue, "total_revenue", "NUMERIC(38,2)")
+    ' Add other weekly metrics as needed
+}
+
+ContainerDb(monthly_kpis, "analytics_schema.monthly_kpis", "Table", "Stores monthly aggregated KPIs.") {
+    Field(id, "id", "BIGSERIAL", "PK")
+    Field(month_start_date, "month_start_date", "DATE", "Unique")
+    Field(total_revenue, "total_revenue", "NUMERIC(38,2)")
+    ' Add other monthly metrics as needed
+}
+@enduml
+`;
+            var diagram = document.getElementById("diagram");
+            diagram.src = "https://www.plantuml.com/plantuml/svg/" + plantuml.encode(uml);
+        </script>
+        <a href="design_diagrams.html">Back to Overview</a>
+    </div>
+</body>
+</html>
